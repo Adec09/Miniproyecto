@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 
-public class MovimientiPersonaje : MonoBehaviour
+public class MovimientoPersonaje : MonoBehaviour
 {
 
     public float moveSpeed = 3;
