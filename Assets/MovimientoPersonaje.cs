@@ -2,14 +2,22 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 public class MovimientiPersonaje : MonoBehaviour
 {
 
     public float moveSpeed = 3;
     [HideInInspector] public Vector3 dir;
-    private CharacterController controller;
-    
+    CharacterController controller;
+
+    [SerializeField] float groundYOffset;
+    [SerializeField] LayerMask groundMask;
+    Vector3 spherePosition;
+
+    [SerializeField] float gravity = -9.81f;
+    Vector3 velocity;
+
     float hzInput, vInput;
 
    
@@ -22,6 +30,7 @@ public class MovimientiPersonaje : MonoBehaviour
     void Update()
     {
         getDirectionAndMove();
+        Gravity();
     }
 
     void getDirectionAndMove()
@@ -33,5 +42,27 @@ public class MovimientiPersonaje : MonoBehaviour
 
         controller.Move(dir * moveSpeed * Time.deltaTime);
         
+    }
+
+    bool IsGrounded()
+    {
+        spherePosition = new Vector3(transform.position.x, transform.position.y - groundYOffset, transform.position.z);
+
+        if (Physics.CheckSphere(spherePosition, controller.radius -0.05f, groundMask)) return true;
+        return false;  
+    }
+
+    void Gravity()
+    {
+        if (!IsGrounded()) velocity.y += gravity * Time.deltaTime;
+        else if (velocity.y < 0) velocity.y = -2;
+
+        controller.Move(velocity  * Time.deltaTime);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(spherePosition, controller.radius - 0.05f);
     }
 }
