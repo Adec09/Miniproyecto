@@ -805,6 +805,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 2b003afbdd2094142b96bf3fff065e30, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 5875211215a39044f855a75c312f0214, type: 2}
     - target: {fileID: 8417361359673230750, guid: 2b003afbdd2094142b96bf3fff065e30, type: 3}
       propertyPath: m_AABB.m_Center.y
       value: -0.31854653
