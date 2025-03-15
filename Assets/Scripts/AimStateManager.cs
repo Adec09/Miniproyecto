@@ -6,8 +6,8 @@ using Unity.Cinemachine;
 public class AimStateManager : MonoBehaviour
 {
 
-    [HideInInspector] public CinemachineCamera camera;
-    public Cinemachine3OrbitRig.AxisState xAxis, yAxis;
+    [SerializeField] float mouseSense = 1;
+    float xAxis, yAxis;
     [SerializeField] Transform cameraFollowPosition;
     
     void Start()
@@ -18,13 +18,14 @@ public class AimStateManager : MonoBehaviour
     
     void Update()
     {
-        xAxis.Update(Time.deltaTime);
-        yAxis.Update(Time.deltaTime);
+        xAxis += Input.GetAxisRaw("Mouse X") * mouseSense;
+        yAxis -= Input.GetAxisRaw("Mouse Y") * mouseSense;
+        yAxis = Mathf.Clamp(yAxis, -80, 80);
     }
 
     private void LateUpdate()
     {
-        cameraFollowPosition.localEulerAngles = new Vector3(yAxis.Value, cameraFollowPosition.localEulerAngles.y, cameraFollowPosition.localEulerAngles.z);
-        transform.eulerAngles = new Vector3(transform.eulerAngles.x, xAxis.Value, transform.eulerAngles.z);
+        cameraFollowPosition.localEulerAngles = new Vector3(yAxis, cameraFollowPosition.localEulerAngles.y, cameraFollowPosition.localEulerAngles.z);
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x, xAxis, transform.eulerAngles.z);
     }
 }
