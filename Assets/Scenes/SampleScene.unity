@@ -207,7 +207,7 @@ Transform:
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
   m_LocalRotation: {x: 0.11487067, y: 0, z: 0, w: 0.9933805}
-  m_LocalPosition: {x: 12.274857, y: 3.171885, z: 29.517467}
+  m_LocalPosition: {x: 12.809856, y: 3.214885, z: 29.332466}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -443,7 +443,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseSense: 1
-  cameraFollowPosition: {fileID: 925968318}
+  cameraFollowPosition: {fileID: 1385687897}
 --- !u!114 &489102190
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -456,13 +456,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9be1f20cb2752874f9456db4bebde97a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
+  currentMoveSpeed: 3
+  walkSpeed: 3
+  walkBackSpeed: 2
+  runSpeed: 7
+  runBackSpeed: 5
+  crouchSpeed: 2
+  crouchBackSpeed: 1
   dir: {x: 0, y: 0, z: 0}
   groundYOffset: 0.6
   groundMask:
     serializedVersion: 2
     m_Bits: 64
   gravity: -9.81
+  hzInput: 0
+  vInput: 0
+  anim: {fileID: 0}
 --- !u!143 &489102191
 CharacterController:
   m_ObjectHideFlags: 0
@@ -511,6 +520,7 @@ Transform:
   m_Children:
   - {fileID: 1228433551}
   - {fileID: 1385687897}
+  - {fileID: 925968318}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &749335266
@@ -668,7 +678,7 @@ MonoBehaviour:
   m_ControllerManager:
     Controllers: []
   PlayerIndex: -1
-  AutoEnableInputs: 1
+  AutoEnableInputs: 0
 --- !u!114 &925968317
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -721,11 +731,11 @@ Transform:
   m_GameObject: {fileID: 925968314}
   serializedVersion: 2
   m_LocalRotation: {x: 0.11487067, y: -0, z: -0, w: 0.9933805}
-  m_LocalPosition: {x: 12.274857, y: 3.171885, z: 29.517467}
+  m_LocalPosition: {x: 0.4840002, y: 2.275885, z: -2.437931}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 489102193}
   m_LocalEulerAnglesHint: {x: 13.347, y: 175.931, z: 0}
 --- !u!114 &925968319
 MonoBehaviour:
@@ -783,7 +793,7 @@ Transform:
   m_GameObject: {fileID: 1385687896}
   serializedVersion: 2
   m_LocalRotation: {x: 0.11487067, y: -0, z: -0, w: 0.9933805}
-  m_LocalPosition: {x: -0.051, y: 1.387, z: -0.397}
+  m_LocalPosition: {x: 0.484, y: 1.43, z: -0.582}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -890,5 +900,4 @@ SceneRoots:
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 1481566699}
-  - {fileID: 925968318}
   - {fileID: 489102193}

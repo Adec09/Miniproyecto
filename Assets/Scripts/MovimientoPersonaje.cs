@@ -7,7 +7,12 @@ using System.Runtime.InteropServices.WindowsRuntime;
 public class MovimientoPersonaje : MonoBehaviour
 {
 
-    public float moveSpeed = 3;
+    public float currentMoveSpeed;
+    public float walkSpeed = 3, walkBackSpeed = 2;
+    public float runSpeed = 7, runBackSpeed = 5;
+    public float crouchSpeed = 2, crouchBackSpeed = 1;
+
+
     [HideInInspector] public Vector3 dir;
     CharacterController controller;
 
@@ -18,12 +23,22 @@ public class MovimientoPersonaje : MonoBehaviour
     [SerializeField] float gravity = -9.81f;
     Vector3 velocity;
 
-    float hzInput, vInput;
+    [HideInInspector] public float hzInput, vInput;
 
+    MovementBaseState currentState;
+
+    public IdleState Idle = new IdleState();
+    public CrouchState Crouch = new CrouchState();
+    public RunState Run = new RunState();
+    public WalkState Walk = new WalkState();
+
+    [HideInInspector] public Animator anim;
    
     void Start()
     {
+        anim = GetComponentInChildren<Animator>();
         controller = GetComponent<CharacterController>();
+        SwitchState(Idle);
     }
 
     
@@ -31,8 +46,18 @@ public class MovimientoPersonaje : MonoBehaviour
     {
         getDirectionAndMove();
         Gravity();
+
+        anim.SetFloat("hzInput", hzInput);
+        anim.SetFloat("vInput", vInput);
+
+        currentState.UpdateState(this);
     }
 
+    public void SwitchState(MovementBaseState state)
+    {
+        currentState = state;
+        currentState.EnterState(this);
+    }
     void getDirectionAndMove()
     {
         hzInput = Input.GetAxis("Horizontal");
@@ -40,7 +65,7 @@ public class MovimientoPersonaje : MonoBehaviour
 
         dir = transform.forward * vInput + transform.right * hzInput;
 
-        controller.Move(dir.normalized * moveSpeed * Time.deltaTime);
+        controller.Move(dir.normalized * currentMoveSpeed * Time.deltaTime);
         
     }
 
