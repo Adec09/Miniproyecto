@@ -15,11 +15,21 @@ public class AimStateManager : MonoBehaviour
     [SerializeField] Transform cameraFollowPosition;
 
     [HideInInspector] public Animator anim;
+    [HideInInspector] public CinemachineCamera vCam;
+    public float adsFov = 40;
+    [HideInInspector] public float hipFov;
+    [HideInInspector] public float currentFov;
+    public float fovSmoothSpeed = 10;
     
     void Start()
     {
+        vCam = GetComponentInChildren<CinemachineCamera>();
+        hipFov = vCam.Lens.FieldOfView;
         anim = GetComponentInChildren<Animator>();
         SwitchState(Hip);
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     
@@ -27,7 +37,9 @@ public class AimStateManager : MonoBehaviour
     {
         xAxis += Input.GetAxisRaw("Mouse X") * mouseSense;
         yAxis -= Input.GetAxisRaw("Mouse Y") * mouseSense;
-        yAxis = Mathf.Clamp(yAxis, -80, 80);
+        yAxis = Mathf.Clamp(yAxis, -65, 65);
+
+        vCam.Lens.FieldOfView = Mathf.Lerp(vCam.Lens.FieldOfView, currentFov, fovSmoothSpeed * Time.deltaTime);
 
         currentState.UpdateState(this);
     }
