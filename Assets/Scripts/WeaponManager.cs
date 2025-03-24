@@ -13,10 +13,14 @@ public class WeaponManager : MonoBehaviour
     [SerializeField] Transform barrelPos;
     [SerializeField] float bulletVelocity;
     [SerializeField] int bulletPerShot;
-    AimStateManager aim; 
+    AimStateManager aim;
+
+    [SerializeField] AudioClip gunShot;
+    AudioSource audioSource;
 
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         aim = GetComponentInParent<AimStateManager>();
         fireRateTimer = fireRate;
     }
@@ -40,6 +44,7 @@ public class WeaponManager : MonoBehaviour
     {
         fireRateTimer = 0;
         barrelPos.LookAt(aim.aimPos);
+        audioSource.PlayOneShot(gunShot);
         for (int i = 0; i < bulletPerShot; i++ )
         {
             GameObject currentBullet = Instantiate(bullet, barrelPos.position, barrelPos.rotation);
