@@ -11,6 +11,7 @@ public class MovimientoPersonaje : MonoBehaviour
     public float walkSpeed = 3, walkBackSpeed = 2;
     public float runSpeed = 7, runBackSpeed = 5;
     public float crouchSpeed = 2, crouchBackSpeed = 1;
+    public float airSpeed = 1.5f; 
 
 
     [HideInInspector] public Vector3 dir;
@@ -21,16 +22,21 @@ public class MovimientoPersonaje : MonoBehaviour
     Vector3 spherePosition;
 
     [SerializeField] float gravity = -9.81f;
+    [SerializeField] float jumpForce = 10;
+    [HideInInspector] public bool jumped;
     Vector3 velocity;
 
     [HideInInspector] public float hzInput, vInput;
 
-    MovementBaseState currentState;
+
+    public MovementBaseState previousState;
+    public MovementBaseState currentState;
 
     public IdleState Idle = new IdleState();
     public CrouchState Crouch = new CrouchState();
     public RunState Run = new RunState();
     public WalkState Walk = new WalkState();
+    public JumpState Jump = new JumpState();
 
     [HideInInspector] public Animator anim;
    
@@ -46,6 +52,7 @@ public class MovimientoPersonaje : MonoBehaviour
     {
         getDirectionAndMove();
         Gravity();
+        Falling();
 
         anim.SetFloat("hzInput", hzInput);
         anim.SetFloat("vInput", vInput);
@@ -62,14 +69,17 @@ public class MovimientoPersonaje : MonoBehaviour
     {
         hzInput = Input.GetAxis("Horizontal");
         vInput = Input.GetAxis("Vertical");
+        Vector3 airDir = Vector3.zero;
+        if (!IsGrounded()) airDir = transform.forward * vInput + transform.right * hzInput;
+        else dir = transform.forward * vInput + transform.right * hzInput;
 
-        dir = transform.forward * vInput + transform.right * hzInput;
 
-        controller.Move(dir.normalized * currentMoveSpeed * Time.deltaTime);
+
+        controller.Move((dir.normalized * currentMoveSpeed + airDir.normalized * airSpeed) * Time.deltaTime);
         
     }
 
-    bool IsGrounded()
+    public bool IsGrounded()
     {
         spherePosition = new Vector3(transform.position.x, transform.position.y - groundYOffset, transform.position.z);
 
@@ -85,9 +95,11 @@ public class MovimientoPersonaje : MonoBehaviour
         controller.Move(velocity  * Time.deltaTime);
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(spherePosition, controller.radius - 0.05f);
-    }
+    void Falling() => anim.SetBool("Falling", !IsGrounded());
+
+    public void JumpForce() => velocity.y += jumpForce;
+
+    public void Jumped() => jumped = true; 
+
+   
 }

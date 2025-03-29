@@ -22,6 +22,8 @@ public class WeaponManager : MonoBehaviour
 
     WeaponAmmo ammo;
 
+    WeaponBloom bloom;
+
     ActionStateManager actions;
 
     WeaponRecoil recoil;
@@ -38,6 +40,7 @@ public class WeaponManager : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         aim = GetComponentInParent<AimStateManager>();
         ammo = GetComponentInParent<WeaponAmmo>();
+        bloom = GetComponent<WeaponBloom>();
         actions = GetComponentInParent<ActionStateManager>();
         muzzleFlashLight = GetComponentInChildren<Light>();
         muzzleFlashParticles = GetComponentInChildren<ParticleSystem>();
@@ -82,6 +85,9 @@ public class WeaponManager : MonoBehaviour
     {
         fireRateTimer = 0;
         barrelPos.LookAt(aim.aimPos);
+
+        barrelPos.localEulerAngles = bloom.BloomAngle(barrelPos);
+
         audioSource.PlayOneShot(gunShot);
         recoil.TriggerRecoil();
         TriggerMuzzleFlash();

@@ -6,7 +6,7 @@ using Unity.Cinemachine;
 public class AimStateManager : MonoBehaviour
 {
 
-    AimBaseState currentState;
+    public AimBaseState currentState;
     public HipFireState Hip = new HipFireState();
     public AimState Aim = new AimState();
 
@@ -25,9 +25,15 @@ public class AimStateManager : MonoBehaviour
     [HideInInspector] public Vector3 actualAimPos;
     [SerializeField] float aimSmoothSpeed = 20;
     [SerializeField] LayerMask aimMask;
+    float yFollowPos, ogYPos;
+    [SerializeField] float crouchCamHeight = 0.6f;
+    MovimientoPersonaje moving;
     
     void Start()
     {
+        moving = GetComponent<MovimientoPersonaje>();
+        ogYPos = cameraFollowPosition.localPosition.y;
+        yFollowPos = ogYPos;
         vCam = GetComponentInChildren<CinemachineCamera>();
         hipFov = vCam.Lens.FieldOfView;
         anim = GetComponent<Animator>();
@@ -52,6 +58,8 @@ public class AimStateManager : MonoBehaviour
         if(Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, aimMask)) 
             aimPos.position = Vector3.Lerp(aimPos.position, hit.point, aimSmoothSpeed * Time.deltaTime);
 
+        MoveCamera();
+
         currentState.UpdateState(this);
     }
 
@@ -65,5 +73,14 @@ public class AimStateManager : MonoBehaviour
     {
         currentState = state;
         currentState.EnterState(this);
+    }
+
+    void MoveCamera()
+    {
+        if (moving.currentState == moving.Crouch) yFollowPos = crouchCamHeight;
+        else yFollowPos = ogYPos;
+
+        //Vector3 newFollowPos = new Vector3(yFollowPos, cameraFollowPosition.localPosition.z);
+        //cameraFollowPosition = Vector3.Lerp(cameraFollowPosition.localPosition, newFollowPos, crouchCamHeight * Time.deltaTime);
     }
 }
