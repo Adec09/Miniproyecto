@@ -9,8 +9,7 @@ public class WeaponAmmo : MonoBehaviour
     public AudioClip magInSound;
     public AudioClip magOutSound;
     public AudioClip releaseSlideSound;
-    public AudioClip EmptySound;
-    internal AudioClip emptySound;
+    
 
     void Start()
     {
@@ -24,7 +23,7 @@ public class WeaponAmmo : MonoBehaviour
         if (extraAmmo >= clipSize)
         {
             int ammoToReload = clipSize - currentAmmo;
-            extraAmmo = ammoToReload;
+            extraAmmo -= ammoToReload;
             currentAmmo += ammoToReload;
         }
 

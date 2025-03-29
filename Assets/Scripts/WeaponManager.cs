@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -16,18 +17,32 @@ public class WeaponManager : MonoBehaviour
     AimStateManager aim;
 
     [SerializeField] AudioClip gunShot;
+    [SerializeField] AudioClip emptyShot;
     AudioSource audioSource;
 
     WeaponAmmo ammo;
 
     ActionStateManager actions;
 
+    WeaponRecoil recoil;
+
+    Light muzzleFlashLight;
+    ParticleSystem muzzleFlashParticles;
+    float lightIntensity;
+    [SerializeField] float lightRetunrSpeed = 20;
+
+
     void Start()
     {
+        recoil = GetComponent<WeaponRecoil>();
         audioSource = GetComponent<AudioSource>();
         aim = GetComponentInParent<AimStateManager>();
         ammo = GetComponentInParent<WeaponAmmo>();
         actions = GetComponentInParent<ActionStateManager>();
+        muzzleFlashLight = GetComponentInChildren<Light>();
+        muzzleFlashParticles = GetComponentInChildren<ParticleSystem>();
+        lightIntensity = muzzleFlashLight.intensity;
+        muzzleFlashLight.intensity = 0;
         fireRateTimer = fireRate;
         
 
@@ -37,14 +52,26 @@ public class WeaponManager : MonoBehaviour
     void Update()
     {
         if(ShouldFire()) Fire();
-        Debug.Log(ammo.currentAmmo);
+        muzzleFlashLight.intensity = Mathf.Lerp(muzzleFlashLight.intensity, 0, lightRetunrSpeed * Time.deltaTime);
     }
 
     bool ShouldFire()
     {
         fireRateTimer += Time.deltaTime;
         if (fireRateTimer < fireRate) return false;
-        if (ammo.currentAmmo == 0) return false;
+        if (ammo.currentAmmo == 0) 
+        {
+            
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                audioSource.PlayOneShot(emptyShot);
+                return false;
+            }
+            else
+            {
+                return false;
+            }
+         }
         if (actions.currentState == actions.Reload) return false;   
         if(semiAuto&&Input.GetKeyDown(KeyCode.Mouse0)) return true;
         if(!semiAuto&&Input.GetKey(KeyCode.Mouse0)) return true;
@@ -56,6 +83,8 @@ public class WeaponManager : MonoBehaviour
         fireRateTimer = 0;
         barrelPos.LookAt(aim.aimPos);
         audioSource.PlayOneShot(gunShot);
+        recoil.TriggerRecoil();
+        TriggerMuzzleFlash();
         ammo.currentAmmo--; 
         for (int i = 0; i < bulletPerShot; i++ )
         {
@@ -64,5 +93,12 @@ public class WeaponManager : MonoBehaviour
             rb.AddForce(barrelPos.forward * bulletVelocity, ForceMode.Impulse);
         }
         
+    }
+
+
+    void TriggerMuzzleFlash()
+    {
+        muzzleFlashParticles.Play();
+        muzzleFlashLight.intensity = lightIntensity;
     }
 }
