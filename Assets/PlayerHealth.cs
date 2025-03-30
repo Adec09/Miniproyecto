@@ -1,11 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
     public int maxHealth = 100;
-    private int currentHealth;
+    private static int currentHealth;
     public TextMeshProUGUI healthText;
 
     void Start()
@@ -33,6 +34,7 @@ public class PlayerHealth : MonoBehaviour
 
     void Die()
     {
+        SceneManager.LoadScene("Loose");
         Debug.Log("El jugador ha muerto");
         
     }
