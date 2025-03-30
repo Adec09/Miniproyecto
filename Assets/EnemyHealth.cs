@@ -7,12 +7,14 @@ public class EnemyHealth : MonoBehaviour
     EnemyIA enemyai;
     RagdollManager ragdollManager;
     [HideInInspector] public bool isDead;
+    SceneTrigger sceneTrigger;
 
     private void Start()
     {
         ragdollManager = GetComponent<RagdollManager>();
         enemyai = GetComponent<EnemyIA>();   
         anim = GetComponent<Animator>();
+        sceneTrigger = FindAnyObjectByType<SceneTrigger>();
     }
 
     public void TakeDamage(float damage)
@@ -30,6 +32,7 @@ public class EnemyHealth : MonoBehaviour
     {
         anim.enabled = false;
         enemyai.agent.isStopped = true;
+        sceneTrigger.KillEnemy();
         enemyai.enabled = false;
         ragdollManager.TriggerRagdoll();
         Debug.Log("Death");

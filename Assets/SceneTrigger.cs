@@ -7,7 +7,8 @@ public class SceneTrigger : MonoBehaviour
 
     public Object sceneToLoad;
     public string enemyTag = "Enemy"; 
-    BoxCollider triggerToActivate; 
+    BoxCollider triggerToActivate;
+    [SerializeField] int enemiesKill = 1;
 
     private bool triggerActivated = false;
 
@@ -19,22 +20,21 @@ public class SceneTrigger : MonoBehaviour
     void Update()
     {
        
-        if (AreAllEnemiesDefeated() && !triggerActivated)
-        {
+        //if (AreAllEnemiesDefeated() && !triggerActivated)
+        //{
             
-            if (triggerToActivate != null)
-            {
-                triggerToActivate.enabled = true; 
-                triggerActivated = true; 
-            }
-        }
+        //    if (triggerToActivate != null)
+        //    {
+        //        triggerToActivate.enabled = true; 
+        //        triggerActivated = true; 
+        //    }
+        //}
     }
 
   
-    bool AreAllEnemiesDefeated()
+    public void KillEnemy()
     {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag(enemyTag); 
-        return enemies.Length == 0; 
+        enemiesKill--;
     }
 
    
@@ -43,8 +43,12 @@ public class SceneTrigger : MonoBehaviour
         
         if (other.CompareTag("Player"))
         {
+            if(enemiesKill == 0)
+            {
+                LoadScene();
+            }
            
-            LoadScene();
+            
         }
     }
 

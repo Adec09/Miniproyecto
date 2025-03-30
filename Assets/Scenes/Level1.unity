@@ -47865,6 +47865,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneToLoad: {fileID: 102900000, guid: 7cecf25845dc9ad41a22ac305f7b29c6, type: 3}
   enemyTag: Enemy
+  enemiesKill: 22
 --- !u!1 &1596579063
 GameObject:
   m_ObjectHideFlags: 0
