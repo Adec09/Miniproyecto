@@ -36,5 +36,15 @@ public class PlayerHealth : MonoBehaviour
         Debug.Log("El jugador ha muerto");
         
     }
+
+    public void Heal(int Heal)
+    {
+        currentHealth += Heal;
+    }
+
+    void Update ()
+    {
+        UpdateHealthUI ();
+    }
 }
 
