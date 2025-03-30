@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices.WindowsRuntime;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -19,9 +20,9 @@ public class WeaponManager : MonoBehaviour
 
     [SerializeField] AudioClip gunShot;
     [SerializeField] AudioClip emptyShot;
-    AudioSource audioSource;
+    [HideInInspector] public AudioSource audioSource;
 
-    WeaponAmmo ammo;
+    [HideInInspector] public WeaponAmmo ammo;
 
     WeaponBloom bloom;
 
@@ -34,13 +35,18 @@ public class WeaponManager : MonoBehaviour
     float lightIntensity;
     [SerializeField] float lightRetunrSpeed = 20;
 
+    public float enemyKickbackForce = 100;
+
+    public Transform leftHandTarget, leftHandHint;
+
+    WeaponClassManager weaponClass;
+
 
     void Start()
     {
-        recoil = GetComponent<WeaponRecoil>();
-        audioSource = GetComponent<AudioSource>();
+        
         aim = GetComponentInParent<AimStateManager>();
-        ammo = GetComponentInParent<WeaponAmmo>();
+        
         bloom = GetComponent<WeaponBloom>();
         actions = GetComponentInParent<ActionStateManager>();
         muzzleFlashLight = GetComponentInChildren<Light>();
@@ -50,6 +56,20 @@ public class WeaponManager : MonoBehaviour
         fireRateTimer = fireRate;
         
 
+    }
+
+    private void OnEnable()
+    {
+        if (weaponClass == null)
+        {
+            weaponClass = GetComponentInParent<WeaponClassManager>();
+            ammo = GetComponentInParent<WeaponAmmo>();
+            audioSource = GetComponent<AudioSource>();
+            recoil = GetComponent<WeaponRecoil>();
+            recoil.recoilFollowPos = weaponClass.recoilFollowPos;
+        }
+        weaponClass.SetCurrentWeapon(this);
+        
     }
 
 
@@ -66,7 +86,7 @@ public class WeaponManager : MonoBehaviour
         if (ammo.currentAmmo == 0) 
         {
             
-            if (Input.GetKeyDown(KeyCode.Mouse0))
+            if (Input.GetKeyDown(KeyCode.Mouse0) && actions.currentState != actions.Reload)
             {
                 audioSource.PlayOneShot(emptyShot);
                 return false;
@@ -77,6 +97,7 @@ public class WeaponManager : MonoBehaviour
             }
          }
         if (actions.currentState == actions.Reload) return false;   
+        if (actions.currentState == actions.Swap) return false;
         if(semiAuto&&Input.GetKeyDown(KeyCode.Mouse0)) return true;
         if(!semiAuto&&Input.GetKey(KeyCode.Mouse0)) return true;
         return false;
@@ -99,6 +120,8 @@ public class WeaponManager : MonoBehaviour
 
             Bullet bulletScript = currentBullet.GetComponent<Bullet>();
             bulletScript.weapon = this;
+
+            bulletScript.dir = barrelPos.transform.forward;
 
             Rigidbody rb = currentBullet.GetComponent<Rigidbody>();
             rb.AddForce(barrelPos.forward * bulletVelocity, ForceMode.Impulse);

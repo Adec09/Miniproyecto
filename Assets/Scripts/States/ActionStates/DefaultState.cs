@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class DefaultState : ActionBaseState
 {
+
+    public float scrollDirection;
     public override void EnterState(ActionStateManager actions)
     {
         actions.rHandAim.weight = 1;
@@ -11,12 +13,18 @@ public class DefaultState : ActionBaseState
     public override void UpdateState(ActionStateManager actions)
     {
         actions.rHandAim.weight = Mathf.Lerp(actions.rHandAim.weight, 1, 8 * Time.deltaTime);
-        actions.lHandIK.weight = Mathf.Lerp(actions.lHandIK.weight, 1, 8 * Time.deltaTime);
+        if(actions.lHandIK.weight == 0) actions.lHandIK.weight = 1;
 
         if (Input.GetKeyDown(KeyCode.R) && CanReload(actions))
         {
             actions.SwitchState(actions.Reload);
         }
+        else if (Input.mouseScrollDelta.y != 0)
+        {
+            scrollDirection = Input.mouseScrollDelta.y;
+            actions.SwitchState(actions.Swap);
+        }
+           
     }
 
     bool CanReload(ActionStateManager action)
