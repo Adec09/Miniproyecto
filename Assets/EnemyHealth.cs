@@ -3,12 +3,16 @@ using UnityEngine;
 public class EnemyHealth : MonoBehaviour
 {
     [SerializeField] public float health;
+    Animator anim;
+    EnemyIA enemyai;
     RagdollManager ragdollManager;
     [HideInInspector] public bool isDead;
 
     private void Start()
     {
         ragdollManager = GetComponent<RagdollManager>();
+        enemyai = GetComponent<EnemyIA>();   
+        anim = GetComponent<Animator>();
     }
 
     public void TakeDamage(float damage)
@@ -24,6 +28,9 @@ public class EnemyHealth : MonoBehaviour
 
    public void EnemyDeath()
     {
+        anim.enabled = false;
+        enemyai.agent.isStopped = true;
+        enemyai.enabled = false;
         ragdollManager.TriggerRagdoll();
         Debug.Log("Death");
     }
