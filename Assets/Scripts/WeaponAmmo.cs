@@ -43,5 +43,10 @@ public class WeaponAmmo : MonoBehaviour
             }
         }
     }
+
+    public void Ammo(int amount)
+    {
+        extraAmmo += amount;
+    }
    
 }
