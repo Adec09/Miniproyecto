@@ -12,6 +12,8 @@ public class SceneTrigger : MonoBehaviour
 
     private bool triggerActivated = false;
 
+    public string escena;
+
     private void Start()
     {
         triggerToActivate = GetComponent<BoxCollider>();
@@ -45,7 +47,7 @@ public class SceneTrigger : MonoBehaviour
         {
             if(enemiesKill == 0)
             {
-                LoadScene();
+                LoadScene(escena);
             }
            
             
@@ -53,12 +55,12 @@ public class SceneTrigger : MonoBehaviour
     }
 
     
-    void LoadScene()
+    void LoadScene(string scene)
     {
         if (sceneToLoad != null)
         {
-            
-            SceneManager.LoadScene(sceneToLoad.name);
+
+            SceneManagere.Singleton.LoadLevel(sceneToLoad.name);
         }
     }
 }
