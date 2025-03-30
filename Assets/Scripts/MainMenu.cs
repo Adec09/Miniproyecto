@@ -1,31 +1,22 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using TMPro;
 
 public class SceneNavigation : MonoBehaviour
 {
     public Object sceneToLoad;
-    
-
-    private void Start()
-    {
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
-        
-    }
 
     public void LoadSelectedScene()
     {
         if (sceneToLoad != null)
         {
             string sceneName = sceneToLoad.name;
-            SceneManagere.Singleton.LoadLevel(sceneName);
-            Debug.Log("Ha cambiado de escena");
+            SceneManager.LoadScene(sceneName);
         }
         else
         {
             Debug.Log("No se ha asignado una escena en el Inspector.");
-            
         }
     }
 
@@ -35,4 +26,5 @@ public class SceneNavigation : MonoBehaviour
         Application.Quit();
     }
 }
+
 

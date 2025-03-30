@@ -34,6 +34,8 @@ public class PlayerHealth : MonoBehaviour
 
     void Die()
     {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
         SceneManager.LoadScene("Loose");
         Debug.Log("El jugador ha muerto");
         

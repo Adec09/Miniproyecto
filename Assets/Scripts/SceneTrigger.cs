@@ -12,7 +12,7 @@ public class SceneTrigger : MonoBehaviour
 
     private bool triggerActivated = false;
 
-    public string escena;
+   
 
     private void Start()
     {
@@ -47,7 +47,7 @@ public class SceneTrigger : MonoBehaviour
         {
             if(enemiesKill == 0)
             {
-                LoadScene(escena);
+                LoadScene();
             }
            
             
@@ -55,12 +55,12 @@ public class SceneTrigger : MonoBehaviour
     }
 
     
-    void LoadScene(string scene)
+    void LoadScene()
     {
         if (sceneToLoad != null)
         {
 
-            SceneManagere.Singleton.LoadLevel(sceneToLoad.name);
+            SceneManager.LoadScene(sceneToLoad.name);
         }
     }
 }
