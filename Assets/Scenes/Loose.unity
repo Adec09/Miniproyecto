@@ -555,7 +555,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d01c13ba182d13408c6ab92e11d6744, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneToLoad: {fileID: 102900000, guid: eba8a1ed882e4f8438ead06cf8676ecd, type: 3}
+  sceneToLoad: MainMenu
 --- !u!4 &756612898
 Transform:
   m_ObjectHideFlags: 0
@@ -825,7 +825,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d01c13ba182d13408c6ab92e11d6744, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneToLoad: {fileID: 102900000, guid: 3b74e76f219bee44a81e8154ac413872, type: 3}
+  sceneToLoad: Level0
 --- !u!1 &1055497284
 GameObject:
   m_ObjectHideFlags: 0

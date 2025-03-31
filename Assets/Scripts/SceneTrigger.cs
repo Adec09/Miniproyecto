@@ -1,67 +1,43 @@
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 public class SceneTrigger : MonoBehaviour
 {
-
-    public Object sceneToLoad;
-    public string enemyTag = "Enemy"; 
-    BoxCollider triggerToActivate;
-    [SerializeField] int enemiesKill = 1;
-
+    public string sceneToLoad; // Almacena el nombre de la escena como string
+    public string enemyTag = "Enemy";
+    private BoxCollider triggerToActivate;
+    [SerializeField] private int enemiesKill = 1;
     private bool triggerActivated = false;
-
-   
 
     private void Start()
     {
         triggerToActivate = GetComponent<BoxCollider>();
     }
 
-    void Update()
-    {
-       
-        //if (AreAllEnemiesDefeated() && !triggerActivated)
-        //{
-            
-        //    if (triggerToActivate != null)
-        //    {
-        //        triggerToActivate.enabled = true; 
-        //        triggerActivated = true; 
-        //    }
-        //}
-    }
-
-  
     public void KillEnemy()
     {
         enemiesKill--;
     }
 
-   
     private void OnTriggerEnter(Collider other)
     {
-        
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && enemiesKill <= 0)
         {
-            if(enemiesKill == 0)
-            {
-                LoadScene();
-            }
-           
-            
+            LoadScene();
         }
     }
 
-    
     void LoadScene()
     {
-        if (sceneToLoad != null)
+        if (!string.IsNullOrEmpty(sceneToLoad))
         {
-
-            SceneManager.LoadScene(sceneToLoad.name);
+            SceneManager.LoadScene(sceneToLoad);
+        }
+        else
+        {
+            Debug.LogError("No se ha asignado una escena en el Inspector.");
         }
     }
 }
+
 

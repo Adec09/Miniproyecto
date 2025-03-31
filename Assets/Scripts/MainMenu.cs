@@ -1,22 +1,19 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using TMPro;
 
 public class SceneNavigation : MonoBehaviour
 {
-    public Object sceneToLoad;
+    [SerializeField] private string sceneToLoad; // Ahora almacena el nombre de la escena
 
     public void LoadSelectedScene()
     {
-        if (sceneToLoad != null)
+        if (!string.IsNullOrEmpty(sceneToLoad))
         {
-            string sceneName = sceneToLoad.name;
-            SceneManager.LoadScene(sceneName);
+            SceneManager.LoadScene(sceneToLoad);
         }
         else
         {
-            Debug.Log("No se ha asignado una escena en el Inspector.");
+            Debug.LogError("No se ha asignado una escena en el Inspector.");
         }
     }
 
@@ -26,5 +23,6 @@ public class SceneNavigation : MonoBehaviour
         Application.Quit();
     }
 }
+
 
 
